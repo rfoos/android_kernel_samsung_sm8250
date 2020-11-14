@@ -84,9 +84,9 @@ build_kernel(){
   make -j$(nproc) -C $(pwd) O=$(pwd)/out CONFIG_BUILD_ARM64_DT_OVERLAY=y $KERNEL_MAKE_ENV ARCH=arm64 REAL_CC=$KERNEL_LLVM_BIN CROSS_COMPILE=$BUILD_CROSS_COMPILE CLANG_TRIPLE=$CLANG_TRIPLE
 
 
-  [ -e out/arch/arm64/boot/Image ] && cp out/arch/arm64/boot/Image $(pwd)/out/Image
-  if [ -e out/arch/arm64/boot/Image-dtb ]; then
-    cp out/arch/arm64/boot/Image-dtb $(pwd)/out/Image-dtb
+  [ -e out/arch/arm64/boot/Image.gz ] && cp out/arch/arm64/boot/Image.gz $(pwd)/out/Image.gz
+  if [ -e out/arch/arm64/boot/Image.gz-dtb ]; then
+    cp out/arch/arm64/boot/Image.gz-dtb $(pwd)/out/Image.gz-dtb
 
     DTBO_FILES=$(find ${DTS_DIR}/samsung/ -name ${CHIPSET_NAME}-sec-${VARIANT}-*-r*.dtbo)
     cat ${DTS_DIR}/vendor/qcom/*.dtb > $(pwd)/out/dtb.img
@@ -104,10 +104,10 @@ anykernel3(){
     git clone https://github.com/osm0sis/AnyKernel3 $PARENT_DIR/AnyKernel3
   fi
   variant
-  if [ -e $DIR/out/arch/arm64/boot/Image-dtb ]; then
+  if [ -e $DIR/out/arch/arm64/boot/Image.gz-dtb ]; then
     cd $PARENT_DIR/AnyKernel3
     git reset --hard
-    cp $DIR/out/arch/arm64/boot/Image-dtb zImage
+    cp $DIR/out/arch/arm64/boot/Image.gz-dtb zImage
     sed -i "s/ExampleKernel by osm0sis/${VARIANT} kernel by afaneh92/g" anykernel.sh
     sed -i "s/=maguro/=${VARIANT}/g" anykernel.sh
     sed -i "s/=toroplus/=/g" anykernel.sh
